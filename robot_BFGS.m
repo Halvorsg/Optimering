@@ -38,5 +38,5 @@ while norm(dd) > tol && n<=max_iter
 
 end
 toc
-robot_arm(theta,L);
+robot_arm(theta,L,p);
 end
