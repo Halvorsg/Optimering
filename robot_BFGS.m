@@ -21,7 +21,8 @@ while norm(dd) > tol && n<=max_iter
     %finding step length
     c1_df_dot_pk = c1*dot(dd,pk);
     c2_df_dot_pk = c1_df_dot_pk/c1*c2;
-    while d(theta+alpha*pk,L,p) > dtheta+alpha*c1_df_dot_pk && robot_gradient(theta+alpha*pk,L,p)'*pk>= c2_df_dot_pk %Wolfe Conditions
+    while d(theta+alpha*pk,L,p) > dtheta+alpha*c1_df_dot_pk && robot_gradient(theta+alpha*pk,L,p)'*pk >= c2_df_dot_pk %Wolfe Conditions
+        %Blir det ikke feil ulikhet ved andre cond?
         alpha = rho*alpha;
     end
     %Updating x

@@ -18,6 +18,3 @@ Y = cumsum(Y); %Flippes senere i dtheta
 dtheta = (flip(X.*(pos_arm(1)-p(1))+Y.*(pos_arm(2)-p(2))));
 
 end
-
-
-
