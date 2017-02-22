@@ -1,4 +1,4 @@
-function [theta,n] = robot_gradeint_descent(p,L, tol)
+function [theta,n] = robot_gradeint_descent(p,L, tol, max_iter)
 theta0 = ones(length(L),1);
 %Dette er de to funksjonene
 tic
@@ -10,7 +10,6 @@ rho = 1/2;
 c = 1/4;
 theta = theta0;
 n = 0;
-max_iter = 100000;
 while norm(dd) > tol && n<=max_iter
     pk = -dd; %Gradient descent
     alpha = alpha0;

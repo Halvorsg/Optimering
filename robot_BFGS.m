@@ -1,6 +1,6 @@
 function [theta,n] = robot_BFGS(p,L,tol)
 tic
-theta = ones(length(L),1);
+[theta,~] = robot_gradeint_descent(p,L, tol, 5);
 %Dette er de to funksjonene
 d = @(theta,L,p) 1/2*norm([sum(L.*cos(cumsum(theta))),sum(L.*sin(cumsum(theta)))]-p)^2;
 dd = robot_gradient(theta,L,p);
