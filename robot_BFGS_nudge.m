@@ -1,4 +1,4 @@
-function [theta,n] = robot_BFGS_nudge(p,L,tol,thetaNudge)
+function [theta,n] = robot_BFGS_nudge(p,L,tol,thetaNudge,nudgeNumber)
 tic
 if thetaNudge == 0
     theta = ones(length(L),1);
@@ -9,7 +9,7 @@ end
 d = @(theta,L,p) 1/2*norm([sum(L.*cos(cumsum(theta))),sum(L.*sin(cumsum(theta)))]-p)^2;
 dd = robot_gradient(theta,L,p);
 %Initialiazing values
-I = eye(length(L));
+I = eye(length(L))*0.1;
 H = I;
 rho = 1/2;
 c1 = 1/10^4;
@@ -25,7 +25,7 @@ while norm(dd) > tol && n<=max_iter
     %finding step length
     c1_df_dot_pk = c1*dot(dd,pk);
     c2_df_dot_pk = c1_df_dot_pk/c1*c2;
-    while d(theta+alpha*pk,L,p) > dtheta+alpha*c1_df_dot_pk && robot_gradient(theta+alpha*pk,L,p)'*pk >= c2_df_dot_pk %Wolfe Conditions
+    while (d(theta+alpha*pk,L,p) > dtheta+alpha*c1_df_dot_pk || robot_gradient(theta+alpha*pk,L,p)'*pk <= c2_df_dot_pk) && alpha>10^(-13) %Wolfe Conditions
         %Blir det ikke feil ulikhet ved andre cond?
         alpha = rho*alpha;
     end
@@ -40,7 +40,24 @@ while norm(dd) > tol && n<=max_iter
     %Updating fx and dd
     dtheta = d(theta,L,p);
     dd = robot_gradient(theta,L,p);
-end
+end 
 toc
-robot_arm(theta,L,p);
+distToTarget = d(theta,L,p);
+distTolerance = 10^-3;
+if (norm(p)<=sum(L) && norm(p)>=2*max(L)-sum(L) && distToTarget > distTolerance)...%point inside C
+        ||(norm(p)>sum(L) && distToTarget>norm(p)-sum(L)+distTolerance)||...%point to far out
+        (norm(p)<2*max(L)-sum(L) && distToTarget> 2*max(L)-sum(L)-norm(p)+distTolerance)%point to close origo to reach
+    %if all are true, then we are 100% certain that we are in a saddle point.
+    if nudgeNumber == 5
+        fprintf('We did not get out of the saddle point')
+        return
+    end
+    for i = 1:length(theta)
+        theta(i) = theta(i) + mod(rand(),0.2*nudgeNumber)-0.1*nudgeNumber; %bigger and bigger nudges
+    end
+    [theta,n] = robot_BFGS_nudge(p,L,tol,theta, nudgeNumber+1);
+end
+if nudgeNumber == 0
+    robot_arm(theta,L,p);
+end
 end
