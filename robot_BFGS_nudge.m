@@ -1,7 +1,10 @@
-function [theta,n] = robot_BFGS(p,L,tol)
+function [theta,n] = robot_BFGS_nudge(p,L,tol,thetaNudge)
 tic
-%[theta,~] = robot_gradeint_descent(p,L, tol, 5);
-theta = ones(length(L),1);
+if thetaNudge == 0
+    theta = ones(length(L),1);
+else
+    theta = thetaNudge;
+end
 %Dette er de to funksjonene
 d = @(theta,L,p) 1/2*norm([sum(L.*cos(cumsum(theta))),sum(L.*sin(cumsum(theta)))]-p)^2;
 dd = robot_gradient(theta,L,p);
@@ -37,7 +40,6 @@ while norm(dd) > tol && n<=max_iter
     %Updating fx and dd
     dtheta = d(theta,L,p);
     dd = robot_gradient(theta,L,p);
-
 end
 toc
 robot_arm(theta,L,p);
