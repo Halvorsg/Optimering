@@ -1,5 +1,5 @@
 function [theta,n] = robot_gradeint_descent(p,L, tol, max_iter)
-theta0 = ones(length(L),1);
+theta0 = ones(length(L),1).*pi/2;
 %Dette er de to funksjonene
 tic
 d = @(theta,L,p) 1/2*norm([sum(L.*cos(cumsum(theta))),sum(L.*sin(cumsum(theta)))]-p)^2;
@@ -23,5 +23,5 @@ while norm(dd) > tol && n<=max_iter
     n = n+1;
 end
 toc
-robot_arm(theta,L,p);
+%robot_arm(theta,L,p);
 end
