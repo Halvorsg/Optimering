@@ -6,7 +6,7 @@ theta = ones(length(L),1);
 d = @(theta,L,p) 1/2*norm([sum(L.*cos(cumsum(theta))),sum(L.*sin(cumsum(theta)))]-p)^2;
 dd = robot_gradient(theta,L,p);
 %Initialiazing values
-I = eye(length(L)).*10^-3;
+I = eye(length(L));
 H = I;
 rho = 1/2;
 c1 = 1/10^4;
