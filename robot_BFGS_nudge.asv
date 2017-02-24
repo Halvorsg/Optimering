@@ -1,19 +1,17 @@
 function [theta,n] = robot_BFGS_nudge(p,L,tol,thetaNudge,nudgeNumber)
 tic
 [flag,theta] = is_outside(L,p);
-if flag == true %If point outside of circle we may terminate
+if flag == true
     n = 0;
-    robot_arm(theta,L,p);
-    toc
     return
 end
-
 if thetaNudge == 0
     theta = ones(length(L),1);
 else
     theta = thetaNudge;
 end
 %Dette er de to funksjonene
+
 d = @(theta,L,p) 1/2*norm([sum(L.*cos(cumsum(theta))),sum(L.*sin(cumsum(theta)))]-p)^2;
 dd = robot_gradient(theta,L,p);
 %Initialiazing values
