@@ -1,18 +1,17 @@
-function [flag,theta] = is_inside(L,p)
-
+function theta = is_inside(L,p,n)
+%% Initiating theta
 theta = zeros(length(L),1);
-SUM = sum(L);
-dist_to_p = norm(p);
-[MAX,n] = max(L);
-radius = MAX-(SUM-MAX);
+%% Setting the first angle
+if norm(p) ~= 0
     thetaS = atan(p(2)/p(1));
-    
-    if p(1)<0
+else
+    thetaS = 0; %if atan(0/0)
+end
+%% if x-value negative    
+    if p(1)<0 
         thetaS=thetaS+pi;     
     end
-
-if dist_to_p <= radius
-    flag = true;
+%% Setting the other angels
     if n == 1
         theta(1) = thetaS;
         theta(2) = pi;
@@ -21,7 +20,4 @@ if dist_to_p <= radius
         theta(n) = pi;
         theta(n+1) = pi;
     end
-else
-    flag = false;
-end
 end

@@ -2,6 +2,29 @@ function [theta,n] = robot_BFGS_fun(p,L,tol)
 tic
 %[theta,n] = robot_gradeint_descent(p,L, tol, 5);
 theta = ones(length(L),1);
+
+dist_to_p = norm(p);
+RADIUS = sum(L); %Outer radius
+[MAX,place] = max(L);
+radius = MAX-(RADIUS-MAX);%Inner radius
+if dist_to_p >= RADIUS % If p in outer disc
+    theta = is_outside(L,p);
+    n = 0;
+    toc
+    robot_arm(theta,L,p);
+    return
+elseif dist_to_p <=radius %if p in inner disc
+    theta = is_inside(L,p,place);
+    n = 0;
+    toc
+    robot_arm(theta,L,p);
+    return
+end
+
+
+
+
+
 %Dette er de to funksjonene
 d = @(theta,L,p) 1/2*norm([sum(L.*cos(cumsum(theta))),sum(L.*sin(cumsum(theta)))]-p)^2;
 dd = robot_gradient(theta,L,p);
