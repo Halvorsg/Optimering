@@ -35,7 +35,8 @@ if thetaNudge == 0
 else
     theta = thetaNudge;
 end
-%Dette er de to funksjonene
+% d is the function we want to minimize
+% dd is the gradient of that function
 d = @(theta,L,p) 1/2*norm([sum(L.*cos(cumsum(theta))),sum(L.*sin(cumsum(theta)))]-p)^2;
 dd = robot_gradient(theta,L,p);
 %Initialiazing values
@@ -44,7 +45,7 @@ H = I;
 n = 0;
 while norm(dd) > tol && n<=max_iter
     n = n+1;
-    %Initial step length and direction
+    %Initial step direction
     pk = -H*dd;
     %finding step length
     alpha = find_alpha(pk,theta,L,p);
@@ -56,7 +57,7 @@ while norm(dd) > tol && n<=max_iter
     rok = 1/dot(yk,sk);
     zk = (H*yk);
     H = H - rok*(sk*zk' + zk*sk') + (rok^2*dot(yk,zk)+rok)*(sk*sk');
-    %Updating fx and dd
+    %Updating dd
     dd = robot_gradient(theta,L,p);
 end 
 toc
