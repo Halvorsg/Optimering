@@ -5,7 +5,6 @@ function dtheta = robot_gradient(theta, L ,p)
 %p - desired point
 %% Postconditions
 %dtheta - the gradient of the function
-%% Finding the gradient
 THETA = cumsum(theta);
 L_cos_theta = L.*cos(THETA);
 L_sin_theta = L.*sin(THETA);

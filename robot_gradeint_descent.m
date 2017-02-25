@@ -30,7 +30,7 @@ elseif dist_to_p <=radius %if p in inner disc
 end
 
 %% Case 2 - point within reach
-theta = ones(length(L),1).*pi/2;
+theta = ones(length(L),1).*pi/4;
 %Dette er de to funksjonene
 d = @(theta,L,p) 1/2*norm([sum(L.*cos(cumsum(theta))),sum(L.*sin(cumsum(theta)))]-p)^2;
 dd = robot_gradient(theta,L,p);

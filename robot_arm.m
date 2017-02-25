@@ -1,6 +1,4 @@
 function final_pos = robot_arm(theta,L,p)
-% Kan sende in theta = [30,30,30] og L = [1,1,1]
-% Plotter en graf som visualiserer robotarmen
 r = sum(L);
 q = zeros(length(theta),2);
 THETA = cumsum(theta);
