@@ -15,7 +15,7 @@ while norm(dd) > tol && n<=max_iter
     %Initial step length and direction
     pk = -H*dd;
     %finding step length
-    alpha = zoom(pk,theta,L,p);
+    alpha = find_alpha(pk,theta,L,p);
     %Updating x
     theta = theta + alpha*pk;
     %Updating H

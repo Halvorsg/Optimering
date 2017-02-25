@@ -16,7 +16,7 @@ end
 
 
 for i=1:8
-    [~,convBFGS(i)]=robot_BFGS(p,L,tol(i));
+    [~,convBFGS(i)]=robot_BFGS_nudge(p,L,tol(i),0,0);
     [~,convGD(i)]=robot_gradeint_descent(p,L,tol(i),100000);
 end
 

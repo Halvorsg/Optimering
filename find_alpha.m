@@ -1,4 +1,4 @@
-function alpha = zoom(pk,theta,L,p)
+function alpha = find_alpha(pk,theta,L,p)
 %Finner alpha som stemmer med wolfe betingelsene 
 %Sto på arket han skrev at man skulle øke ar til armijo holder, vet ikke om dette gjøre korrekt her. 
 d = @(theta,L,p) 1/2*norm([sum(L.*cos(cumsum(theta))),sum(L.*sin(cumsum(theta)))]-p)^2;
@@ -11,10 +11,10 @@ c1 = 10^-4;
 c1_dd_dot_pk = c1*dot(dd,pk);
 c2_df_dot_pk = c1_dd_dot_pk/c1*c2;
 %burde være mulig å finne en bedre måte å finne ar på...
-while ~(d(theta+ar*pk,L,p) <= d(theta,L,p)+ar*c1_dd_dot_pk)
-    ar = ar+0.05;
-end
-alpha = (ar+al)/2;
+% while ~(d(theta+ar*pk,L,p) <= d(theta,L,p)+ar*c1_dd_dot_pk)
+%     ar = ar+0.05;
+% end
+alpha = 1;
 while ~(d(theta+alpha*pk,L,p) <= d(theta,L,p)+alpha*c1_dd_dot_pk && robot_gradient(theta+alpha*pk,L,p)'*pk >= c2_df_dot_pk)
     %while Wolfe conditiones not satisfied 
     if ~(d(theta+alpha*pk,L,p) <= d(theta,L,p)+alpha*c1_dd_dot_pk) %~(2. Wolfe cond.)

@@ -17,7 +17,7 @@ end
 d = @(theta,L,p) 1/2*norm([sum(L.*cos(cumsum(theta))),sum(L.*sin(cumsum(theta)))]-p)^2;
 dd = robot_gradient(theta,L,p);
 %Initialiazing values
-I = eye(length(L))*0.1;
+I = eye(length(L))*0.01;
 H = I;
 % rho = 1/2;
 % c1 = 1/10^4;
@@ -34,7 +34,7 @@ while norm(dd) > tol && n<=max_iter
 %     c1_df_dot_pk = c1*dot(dd,pk);
 %     c2_df_dot_pk = c1_df_dot_pk/c1*c2;
     
-    alpha = zoom(pk,theta,L,p);
+    alpha = find_alpha(pk,theta,L,p);
 %     while (d(theta+alpha*pk,L,p) > dtheta+alpha*c1_df_dot_pk || robot_gradient(theta+alpha*pk,L,p)'*pk <= c2_df_dot_pk) && alpha>10^(-13) %Wolfe Conditions
 %         %Blir det ikke feil ulikhet ved andre cond?
 %         alpha = rho*alpha;
@@ -68,6 +68,6 @@ if (norm(p)<=sum(L) && norm(p)>=2*max(L)-sum(L) && distToTarget > distTolerance)
     [theta,n] = robot_BFGS_nudge(p,L,tol,theta, nudgeNumber+1);
 end
 if nudgeNumber == 0
-    robot_arm(theta,L,p);
+    %robot_arm(theta,L,p);
 end
 end
