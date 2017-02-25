@@ -1,19 +1,24 @@
-function [theta,n] = robot_BFGS_nudge(p,L,tol,thetaNudge,nudgeNumber)
+function [theta,n] = robot_BFGS_nudge(p,L,tol,max_iter,thetaNudge,nudgeNumber)
 tic
-[flag1,theta] = is_outside(L,p);
-if flag1 == true %If point outside of circle we may terminate
+
+dist_to_p = norm(p);
+RADIUS = sum(L); %Outer radius
+[MAX,place] = max(L);
+radius = MAX-(RADIUS-MAX);%Inner radius
+if dist_to_p >= RADIUS % If p in outer disc
+    theta = is_outside(L,p);
     n = 0;
+    toc
     robot_arm(theta,L,p);
-    toc
     return
-end
-[flag1,theta] = is_inside(L,p);
-if flag1 == true %If point inside of circle we may terminate
+elseif dist_to_p <=radius %if p in inner disc
+    theta = is_inside(L,p,place);
     n = 0;
-    %robot_arm(theta,L,p);
     toc
+    robot_arm(theta,L,p);
     return
 end
+
 
 if thetaNudge == 0
     theta = ones(length(L),1);
@@ -30,7 +35,6 @@ H = I;
 % c1 = 1/10^4;
 % c2 = 0.9;
 % dtheta = d(theta,L,p);
-max_iter = 100000;
 n = 0;
 while norm(dd) > tol && n<=max_iter
     n = n+1;
