@@ -1,7 +1,7 @@
 function [theta,n] = robot_gradeint_descent(p,L, tol, max_iter)
 %% Preconditions 
 %p - point desired
-%L - Column ector of length segments
+%L - Column vector of length segments
 %tol - Toleration for the norm of the gradient
 %max_iter - Max iterations
 % Do not call this function with max_iter less than 1000 if you want to
