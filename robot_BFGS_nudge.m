@@ -64,9 +64,7 @@ toc
 %% Checking if theta is a saddle point
 distToTarget = d(theta,L,p);
 distTolerance = 10^-3;
-if (norm(p)<=sum(L) && norm(p)>=2*max(L)-sum(L) && distToTarget > distTolerance)...%point inside C
-        ||(norm(p)>sum(L) && distToTarget>norm(p)-sum(L)+distTolerance)||...%point to far out
-        (norm(p)<2*max(L)-sum(L) && distToTarget> 2*max(L)-sum(L)-norm(p)+distTolerance)%point to close origo to reach
+if (norm(p)<=sum(L) && norm(p)>=2*max(L)-sum(L) && distToTarget > distTolerance)%point inside C
     %if all are true, then we are 100% certain that we are in a saddle point.
     if nudgeNumber == 5
         fprintf('We did not get out of the saddle point')
@@ -75,9 +73,9 @@ if (norm(p)<=sum(L) && norm(p)>=2*max(L)-sum(L) && distToTarget > distTolerance)
     for i = 1:length(theta)
         theta(i) = theta(i) + mod(rand(),0.2*nudgeNumber)-0.1*nudgeNumber; %bigger and bigger nudges
     end
-    [theta,n] = robot_BFGS_nudge(p,L,tol,theta, nudgeNumber+1);
+    [theta,n] = robot_BFGS_nudge(p,L,tol,max_iter,theta, nudgeNumber+1);
 end
 if nudgeNumber == 0
-    %robot_arm(theta,L,p);
+    robot_arm(theta,L,p);
 end
 end
