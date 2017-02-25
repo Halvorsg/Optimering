@@ -1,9 +1,16 @@
 function [theta,n] = robot_BFGS_nudge(p,L,tol,thetaNudge,nudgeNumber)
 tic
-[flag,theta] = is_outside(L,p);
-if flag == true %If point outside of circle we may terminate
+[flag1,theta] = is_outside(L,p);
+if flag1 == true %If point outside of circle we may terminate
     n = 0;
     robot_arm(theta,L,p);
+    toc
+    return
+end
+[flag1,theta] = is_inside(L,p);
+if flag1 == true %If point inside of circle we may terminate
+    n = 0;
+    %robot_arm(theta,L,p);
     toc
     return
 end

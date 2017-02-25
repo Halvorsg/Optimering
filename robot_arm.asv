@@ -16,5 +16,5 @@ plot(q(:,1),q(:,2),'-or')
 plot(q(end,1),q(end,2),'*k')
 plot(p(1),p(2),'Og')
 legend('Start point','Arm','End point arm','Reaching point')
-final_pos = [sum(L.*cos(THETA')),sum(L.*sin(THETA'))];
+final_pos = [sum(L.*cos(THETA)),sum(L.*sin(THETA))];
 end

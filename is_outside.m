@@ -10,11 +10,8 @@ if len > dist_to_p
 else
     flag = true;
     theta(1) = atan(p(2)/p(1));
-    if p(2)<0 && p(1)>0
-        theta(1)=theta(1)+pi;
-    end
-    if p(2)<0 && p(1)<0
-        theta(1)=theta(1)+pi;
+    if p(1)<0
+        theta(1)=theta(1)+pi;     
     end
 end
 end
