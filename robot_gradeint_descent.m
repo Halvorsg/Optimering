@@ -1,4 +1,7 @@
 function [theta,n] = robot_gradeint_descent(p,L, tol, max_iter)
+% Do not call this function with max_iter less than 1000 if you want to
+% plot the solution.
+
 theta0 = ones(length(L),1).*pi/2;
 %Dette er de to funksjonene
 tic
@@ -23,5 +26,7 @@ while norm(dd) > tol && n<=max_iter
     n = n+1;
 end
 toc
-%robot_arm(theta,L,p);
+if max_iter>=1000
+    robot_arm(theta,L,p);
+end
 end
