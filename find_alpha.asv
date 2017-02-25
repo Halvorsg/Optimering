@@ -3,7 +3,7 @@ function alpha = find_alpha(pk,theta,L,p)
 %Sto på arket han skrev at man skulle øke ar til armijo holder, vet ikke om dette gjøre korrekt her. 
 d = @(theta,L,p) 1/2*norm([sum(L.*cos(cumsum(theta))),sum(L.*sin(cumsum(theta)))]-p)^2;
 dd = robot_gradient(theta,L,p);
-%% Initiating values
+% Initiating values
 al = 0;
 ar = 1;
 c2 = 0.9;
