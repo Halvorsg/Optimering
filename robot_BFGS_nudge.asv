@@ -1,11 +1,18 @@
 function [theta,n] = robot_BFGS_nudge(p,L,tol,max_iter,thetaNudge,nudgeNumber)
 %% Preconditions
 %p - desired point
-%L - 
+%L - Column ector of length segments
+%tol - Toleration for the norm of the gradient
+%max_iter - Max iterations
+%thetaNudge - 
+%nudgeNumber - 
+%% Post conditions 
+%theta - the angels between each segment
+
 tic
 
 dist_to_p = norm(p);
-RADIUS = sum(L); %Outer radius
+RADIUS = sum(L)-tol; %Outer radius
 [MAX,place] = max(L);
 radius = MAX-(RADIUS-MAX);%Inner radius
 if dist_to_p >= RADIUS % If p in outer disc
@@ -34,26 +41,14 @@ dd = robot_gradient(theta,L,p);
 %Initialiazing values
 I = eye(length(L))*0.01;
 H = I;
-% rho = 1/2;
-% c1 = 1/10^4;
-% c2 = 0.9;
-% dtheta = d(theta,L,p);
 n = 0;
 while norm(dd) > tol && n<=max_iter
     n = n+1;
     %Initial step length and direction
-%     alpha = 1;
     pk = -H*dd;
     %finding step length
-%     c1_df_dot_pk = c1*dot(dd,pk);
-%     c2_df_dot_pk = c1_df_dot_pk/c1*c2;
-    
     alpha = find_alpha(pk,theta,L,p);
-%     while (d(theta+alpha*pk,L,p) > dtheta+alpha*c1_df_dot_pk || robot_gradient(theta+alpha*pk,L,p)'*pk <= c2_df_dot_pk) && alpha>10^(-13) %Wolfe Conditions
-%         %Blir det ikke feil ulikhet ved andre cond?
-%         alpha = rho*alpha;
-%     end
-    %Updating x
+    %Updating theta
     theta = theta + alpha*pk;
     %Updating H
     sk = alpha*pk;
@@ -62,7 +57,6 @@ while norm(dd) > tol && n<=max_iter
     zk = (H*yk);
     H = H - rok*(sk*zk' + zk*sk') + (rok^2*dot(yk,zk)+rok)*(sk*sk');
     %Updating fx and dd
-%     dtheta = d(theta,L,p);
     dd = robot_gradient(theta,L,p);
 end 
 toc

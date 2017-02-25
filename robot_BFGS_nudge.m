@@ -6,8 +6,11 @@ function [theta,n] = robot_BFGS_nudge(p,L,tol,max_iter,thetaNudge,nudgeNumber)
 %max_iter - Max iterations
 %thetaNudge - 
 %nudgeNumber - 
+%% Post conditions 
+%theta - the angels between each segment
+%n - number of iterations
+%% Case 1 - point out of reach
 tic
-
 dist_to_p = norm(p);
 RADIUS = sum(L)-tol; %Outer radius
 [MAX,place] = max(L);
@@ -26,7 +29,7 @@ elseif dist_to_p <=radius %if p in inner disc
     return
 end
 
-
+%% Case 2 - point within reach
 if thetaNudge == 0
     theta = ones(length(L),1);
 else
@@ -57,6 +60,7 @@ while norm(dd) > tol && n<=max_iter
     dd = robot_gradient(theta,L,p);
 end 
 toc
+%% Checking if theta is a saddle point
 distToTarget = d(theta,L,p);
 distTolerance = 10^-3;
 if (norm(p)<=sum(L) && norm(p)>=2*max(L)-sum(L) && distToTarget > distTolerance)...%point inside C
