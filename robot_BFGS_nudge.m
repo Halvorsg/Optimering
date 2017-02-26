@@ -4,10 +4,10 @@ function [theta,n] = robot_BFGS_nudge(p,L,tol,max_iter,thetaNudge,nudgeNumber)
 %L - Column ector of length segments
 %tol - Toleration for the norm of the gradient
 %max_iter - Max iterations
-%thetaNudge - 
-%nudgeNumber - 
+%thetaNudge - Generally set this to 0
+%nudgeNumber - Generally set this to 0
 %% Post conditions 
-%theta - the angels between each segment
+%theta - the angles between each segment
 %n - number of iterations
 %% Case 1 - point out of reach
 tic
